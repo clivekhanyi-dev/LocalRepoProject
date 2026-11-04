@@ -21,3 +21,8 @@ Not verified here: installation or execution on a physical Samsung, Android docu
 Five additional model tests verify boolean precedence and rejection, unknown tags, seal-in/dropout, TON timing/reset, sequential scan behaviour, SET/RESET ordering and hydraulic/electrical units. The expanded mobile end-to-end test verifies advanced module answers/progress/notebook, uploaded text evidence and old notes across project save/load, editable PLC presets, timer completion, stop dropout, compiler diagnostics, symbols and the new calculators. Responsive views include the PLC lab and symbols at 360/412/768/1280 pixels. Python account/project integration remains passing. The title expectation changed to Automation Engineering Academy.
 
 CODESYS compilation, full ST execution, general hydraulic/electrical circuit simulation and certification of the authored symbols have not been performed or claimed. Existing Android native packaging is unchanged by this web update.
+
+
+## Version 1 standalone HTML
+
+The existing frontend is bundled with inline styles/scripts and the ST example as a data URL. Only this generated edition injects a browser-local store; the original backend authentication is retained for server clients. The exact HTML passes offline Chromium tests for local profile/project persistence, autosave, browser restart, JSON backup recovery/rejection, unfinished PLC drafts and export when browser storage is blocked. The managed browser blocks file:// navigation; these tests use a loopback URL fulfilled with the bundled bytes from memory and do not establish a real Windows double-click test. See VERSION-1.md for that limitation and browser-storage behaviour. The server-app regression also passes after adding shared backup support.

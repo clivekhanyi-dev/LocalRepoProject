@@ -1,5 +1,8 @@
 # Automation Engineering Academy
 
+**Version 1: open `Automation-Academy-V1.html` directly in Chrome or Edge.** This is the single-file offline desktop edition; no Python or VS Code is needed. See [Version 1 instructions](docs/VERSION-1.md) for saving, backups and transferring existing projects. Server/Android instructions below still apply to the original hosted edition.
+
+
 An automation learning workspace spanning pneumatics, hydraulics, electrical engineering and CODESYS / IEC 61131-3 programming. Existing accounts, projects, product comparisons and notes remain compatible. Independent of manufacturers.
 
 ## Run locally

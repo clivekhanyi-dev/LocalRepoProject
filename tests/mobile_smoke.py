@@ -1,5 +1,5 @@
 """Requires Playwright and Chromium; runs against an isolated temporary server/database."""
-import os, subprocess, tempfile, time, socket
+import os, subprocess, tempfile, time, socket, json
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
@@ -27,7 +27,7 @@ with tempfile.TemporaryDirectory() as tmp:
    assert '754.0' in page.locator('#force').inner_text()
    page.locator('[data-tab="compare"]').click()
    page.locator('.product input[type=file]').first.set_input_files({'name':'datasheet.txt','mimeType':'text/plain','buffer':b'Source excerpt for a test valve.'})
-   assert page.locator('#excerpt0').input_value()=='Source excerpt for a test valve.'
+   page.wait_for_function("document.getElementById('excerpt0').value==='Source excerpt for a test valve.'")
    page.locator('#compareBtn').click()
    assert page.get_by_text('Insufficient evidence',exact=True).is_visible()
    page.evaluate("navigate('learn')")
@@ -66,10 +66,14 @@ with tempfile.TemporaryDirectory() as tmp:
    page.locator('#mobileProjectName').fill('Mobile project')
    page.locator('#projectSave').click()
    page.get_by_text('Project, notes and progress saved.',exact=True).wait_for()
+   with page.expect_download() as exported:page.locator('#exportBackup').click()
+   backup=Path(tmp)/'server-backup.json';exported.value.save_as(backup)
+   data=json.loads(backup.read_text());assert data['format']=='automation-academy-backup'
+   assert data['projects'][0]['project']['advancedNotes']=='Capstone design notes'
    page.reload();page.locator('#projectOpen').click()
    page.get_by_role('button',name='Mobile project',exact=True).click()
    assert page.locator('#studio').is_visible()
-   assert page.locator('#excerpt0').input_value()=='Source excerpt for a test valve.'
+   page.wait_for_function("document.getElementById('excerpt0').value==='Source excerpt for a test valve.'")
    page.locator('#coil').check();page.locator('#step').click()
    assert 'Cylinder retracts' in page.locator('#feedback').inner_text()
    page.locator('[data-tab="learn"]').click()
