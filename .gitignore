@@ -1,0 +1,8 @@
+*.sqlite3
+*.sqlite3-*
+__pycache__/
+android/.gradle/
+android/local.properties
+android/**/build/
+*.jks
+*.keystore

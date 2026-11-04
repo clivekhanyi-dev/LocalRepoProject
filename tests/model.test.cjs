@@ -1,0 +1,7 @@
+const test=require('node:test'),assert=require('node:assert/strict'),{validate,forces}=require('../web/model.js');
+const p={nodes:[{id:'s',kind:'supply'},{id:'v',kind:'valve'},{id:'c',kind:'cylinder'}],wires:[['s:out','v:1'],['v:2','c:cap'],['v:4','c:rod']]};
+test('complete circuit passes and disconnected supply fails',()=>{assert.deepEqual(validate(p),[]);assert.match(validate({...p,wires:p.wires.slice(1)}).join(' '),/air supply/)});
+test('reversed cylinder connections fail foundation topology',()=>{assert.ok(validate({...p,wires:[p.wires[0],['v:2','c:rod'],['v:4','c:cap']]}).length)});
+test('force uses pressure and annular area with invalid inputs rejected',()=>{const f=forces(6,32,12);assert.ok(Math.abs(f.extend-482.55)<.01);assert.ok(f.retract<f.extend);assert.equal(forces(6,32,32),null)});
+test('de-energised extends, energised retracts, travel stays bounded',()=>{const {advance}=require('../web/model.js');assert.ok(advance(.5,false)>.5);assert.ok(advance(.5,true)<.5);assert.equal(advance(1,false),1);assert.equal(advance(0,true),0)});
+test('comparison refuses incomplete evidence and flags function conflict',()=>{const {compare}=require('../web/model.js');assert.equal(compare({},{}).status,'Insufficient evidence');const a={},b={};for(let i=0;i<11;i++)a[i]=b[i]='documented value';assert.match(compare(a,b).status,/Candidate/);b[1]='other function';assert.match(compare(a,b).status,/Unsuitable/);delete b[10];assert.equal(compare(a,b).status,'Insufficient evidence')});
