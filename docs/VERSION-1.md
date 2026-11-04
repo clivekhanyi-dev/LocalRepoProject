@@ -34,7 +34,7 @@ Starting V1 without this import gives you a separate local workspace.
 
 ## Future updates and development
 
-We can improve V1 incrementally while retaining the JSON backup format. The existing web source remains in `web/`; `tools/build_standalone.py` bundles it reproducibly into the root HTML. The current builder now emits V2; use the `standalone-v1.0.0` tag for the historical V1 generator and source. The original V1 HTML remains unchanged. End users do not run this command.
+We can improve V1 incrementally while retaining the JSON backup format. The existing web source remains in `web/`; `tools/build_standalone.py` bundles it reproducibly into the root HTML. The current builder now emits the latest V3; use the `standalone-v1.0.0` tag for the historical V1 generator and source. The original V1 HTML remains unchanged. End users do not run this command.
 
 Do not manually edit the generated HTML for development: change the source and rebuild. The normal Python/Android clients continue using the original server-based authentication; only the standalone HTML injects the local-store adapter.
 

@@ -64,3 +64,6 @@ The existing named-project save and autosave include V2 sizing inputs, notes, se
 20 deterministic model tests cover existing functions and new sizing/flow/panel calculations, the five PLC examples, sensor sequence, timeout and reset behaviour. Offline browser tests export from the actual V1 bundle, import into V2, run the cylinder sequence, exercise reports and ST downloads, restart the browser, restore V2 backups and check layouts at 360/412/768/1280 pixels. The existing server-app regression still passes.
 
 As with V1, the managed test browser blocks file:// navigation. Tests load the exact single-HTML bytes through an in-memory loopback route with networking disabled; they do not constitute a physical Windows double-click test. No CODESYS runtime/compiler, actual machine or certified fluid-power solver has been used. Symbol drawings use conventional/educational notation and are not a certified standards library.
+
+
+The current source builder now emits V3. This V2 HTML is preserved unchanged; use the standalone-v2.0.0 tag for its historical source/generator. See VERSION-3.md for the optional V3 upgrade.

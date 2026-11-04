@@ -33,3 +33,10 @@ The existing frontend is bundled with inline styles/scripts and the ST example a
 Ten additional model tests cover directional bore sizing with pressure/efficiency/margin, absolute-pressure/temperature air conversion, travel-time consistency, tube-ID units, DC/thermal budgeting, uniform-module layout, all five supplied PLC examples, a complete two-sensor sequence, timeout and edge-reset recovery, reversing neutral time and load/gravity/return-flow calculations. Together with the existing ten tests, 20 model tests pass.
 
 The exact V2 HTML passes offline browser tests for actual V1 backup migration, sizing/air/panel inputs and notes, 36 symbols, four functional diagrams, the 15-rung cylinder example, text/ST downloads, process restart, backup recovery and 360/412/768/1280 layouts. Existing server/mobile regression remains passing. The V1 HTML is unchanged. File URL policy, CODESYS execution, physical equipment, catalogue selection and symbol-certification limitations remain as documented in VERSION-2.md.
+
+
+## Version 3
+
+Eight new panel-model tests cover integrated template references/geometry, entered keep-outs, depth/source assumptions, revision-bound evidence and non-applicability inventory, standards-record completeness, learning prerequisites and malformed import rejection. Twenty earlier model tests remain passing.
+
+The exact V3 bundle passes offline V2→V3 migration tests, actual pointer/numeric panel manipulation, source/review/standards/learning persistence, stale-evidence behaviour, escaped script-free HTML report generation, browser restart, backup recovery, invalid panel rejection and 360/412/768/1500 layouts. Existing server/mobile regression passes. These tests do not verify standard editions/adoptions, actual equipment/PL/SIL, conformity or a Windows file double-click. See VERSION-3.md for those limits.

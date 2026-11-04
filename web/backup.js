@@ -16,6 +16,7 @@ function validateBackup(value){
   if(d.completed!==undefined&&(!Array.isArray(d.completed)||!d.completed.every(i=>Number.isInteger(i)&&i>=0&&i<5)))throw Error('Invalid foundation progress.');
   if(d.products!==undefined&&(!Array.isArray(d.products)||d.products.length>2))throw Error('Invalid product evidence.');
   if(d.advancedCompleted!==undefined&&(!Array.isArray(d.advancedCompleted)||!d.advancedCompleted.every(i=>typeof i==='string')))throw Error('Invalid advanced progress.');
+  if(d.designV3&&window.PanelDesign)PanelDesign.validateDesign(d.designV3);
   if(d.plc){if(!Array.isArray(d.plc.program)||d.plc.program.length<1||d.plc.program.length>16)throw Error('Invalid PLC program.');for(const r of d.plc.program)if(!r||typeof r.tag!=='string'||typeof r.expression!=='string'||r.expression.length>1500||!['COIL','SET','RESET','TON'].includes(r.action)||!Number.isFinite(Number(r.preset)))throw Error('Invalid PLC rung.');}
  }
  return value.projects;

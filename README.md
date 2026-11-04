@@ -1,6 +1,6 @@
 # Automation Engineering Academy
 
-**Version 2: open `Automation-Academy-V2.html` directly in Chrome or Edge.** This is the single-file offline desktop edition; no Python or VS Code is needed. See [Version 2 instructions](docs/VERSION-2.md) for saving, backups and transferring existing projects. Server/Android instructions below still apply to the original hosted edition.
+**Version 3: open `Automation-Academy-V3.html` directly in Chrome or Edge.** This is the single-file offline desktop edition; no Python or VS Code is needed. See [Version 3 instructions](docs/VERSION-3.md) for saving, backups and transferring existing projects. Server/Android instructions below still apply to the original hosted edition.
 
 
 An automation learning workspace spanning pneumatics, hydraulics, electrical engineering and CODESYS / IEC 61131-3 programming. Existing accounts, projects, product comparisons and notes remain compatible. Independent of manufacturers.
@@ -76,3 +76,12 @@ For existing Windows ZIP installations: download the updated `android-mobile-app
 V2 extends the single-file V1 app with cylinder/load/bore/stroke and air-flow worksheets, tube-ID screening, a DC panel/thermal budget and uniform-module layout tool, 36 symbols, four worked functional circuits, five runnable PLC examples, additional simulated inputs and two full CODESYS ST references. See [Version 2 guide](docs/VERSION-2.md) for assumptions and limitations. V1 HTML is preserved unchanged; export a V1 backup and import it into V2.
 
 `python3 tools/build_standalone.py` now builds the current V2 HTML. The historical V1 generator/source is retained by the standalone-v1.0.0 tag. Run `node tests/design.test.cjs` for the ten new model/example tests and `python3 tests/version2_smoke.py` for the offline migration/workbench regression.
+
+
+## Version 3 integrated panel / engineering pathway
+
+The current builder emits `Automation-Academy-V3.html`. V1/V2 files and tags remain unchanged. V3 adds a draggable entered-geometry panel planner, three integrated reference packages (pneumatic conveyor, hydraulic clamp/pneumatic loader, VFD/proportional axis), South Africa/SANS-with-IEC scope and source records, revision-attributed review evidence, printable reports and an eight-part practical engineering portfolio path.
+
+These are learning/preliminary-design tools and self-reported evidence inventories, not standards verification, actual device pinouts, validated protective-function wiring, construction approval or certification. Current editions/adoptions must be checked against the applicable sources. See [V3 guide](docs/VERSION-3.md).
+
+Additional checks: `node tests/panel.test.cjs` and `python3 tests/version3_smoke.py`. The browser regression includes actual V2 backup migration and preserves all earlier project fields.
