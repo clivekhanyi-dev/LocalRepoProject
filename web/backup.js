@@ -19,6 +19,7 @@ function validateBackup(value){
   if(d.advancedCompleted!==undefined&&(!Array.isArray(d.advancedCompleted)||!d.advancedCompleted.every(i=>typeof i==='string')))throw Error('Invalid advanced progress.');
   if(d.designV3&&window.PanelDesign)PanelDesign.validateDesign(d.designV3);
   if(d.buildV4&&window.PanelAssembly){if(!d.designV3?.plan)throw Error('Missing panel plan for easy-builder data.');PanelAssembly.validate(d.designV3.plan,d.buildV4,PanelFunctionPorts);}
+  if(d.masteryV6&&window.MasteryLab)MasteryLab.validate(d.masteryV6);
   if(d.practicalV5&&window.PracticalLab)PracticalLab.validate(d.practicalV5);
   if(d.plc){if(!Array.isArray(d.plc.program)||d.plc.program.length<1||d.plc.program.length>16)throw Error('Invalid PLC program.');for(const r of d.plc.program)if(!r||typeof r.tag!=='string'||typeof r.expression!=='string'||r.expression.length>1500||!['COIL','SET','RESET','TON'].includes(r.action)||!Number.isFinite(Number(r.preset)))throw Error('Invalid PLC rung.');}
  }
