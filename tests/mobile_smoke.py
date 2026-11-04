@@ -19,6 +19,7 @@ with tempfile.TemporaryDirectory() as tmp:
    assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Page overflow'
    page.locator('[data-tab="learn"]').click()
    assert page.get_by_text('PLC foundations',exact=False).count()
+   page.get_by_text('Foundation refresher (existing lessons)',exact=True).click()
    page.locator('#lessons input').first.check()
    page.locator('#notes').fill('Samsung test notes')
    page.locator('[data-tab="calculators"]').click()
@@ -29,6 +30,34 @@ with tempfile.TemporaryDirectory() as tmp:
    assert page.locator('#excerpt0').input_value()=='Source excerpt for a test valve.'
    page.locator('#compareBtn').click()
    assert page.get_by_text('Insufficient evidence',exact=True).is_visible()
+   page.evaluate("navigate('learn')")
+   page.locator('#lessonTrack').select_option('Hydraulics')
+   page.locator('#advancedLessons > details > summary').first.click()
+   page.locator('#advancedLessons textarea').first.fill('Fluid power = 5 kW; shaft input = 5.88 kW')
+   page.locator('#advancedLessons input[type=checkbox]').first.check()
+   page.locator('#advancedNotes').fill('Capstone design notes')
+   page.evaluate("navigate('calculators')")
+   assert '5.00 kW' in page.locator('#hydResult').inner_text()
+   assert '14.67 A' in page.locator('#motorResult').inner_text()
+   page.evaluate("navigate('symbols')")
+   page.locator('#symbolSearch').fill('hydraulic')
+   assert page.locator('#symbolLibrary svg').count() >= 3
+   page.evaluate("navigate('plc')")
+   page.locator('.rung-preset').nth(1).fill('200')
+   page.locator('#compilePlc').click()
+   page.locator('#plcStart').check();page.locator('#scanPlc').click()
+   assert page.evaluate('labState.tags.Run') is True
+   page.locator('#plcStart').uncheck()
+   page.locator('#scanPlc').click();page.locator('#scanPlc').click()
+   assert page.evaluate('labState.tags.Motor') is True
+   page.locator('#plcStop').uncheck();page.locator('#scanPlc').click()
+   assert page.evaluate('labState.tags.Motor') is False
+   assert page.evaluate('labState.tags.Fault') is True
+   page.locator('.rung-expression').first.fill('UnknownTag')
+   page.locator('#compilePlc').click()
+   assert 'Unknown tag' in page.locator('#plcError').inner_text()
+   page.locator('.rung-expression').first.fill('StopHealthy AND OverloadHealthy AND (Start OR Run)')
+   page.locator('#compilePlc').click()
    page.locator('[data-tab="profile"]').click()
    page.locator('#profileLogin').click()
    page.locator('#email').fill('mobile@example.com');page.locator('#password').fill('mobile-test-password')
@@ -45,6 +74,10 @@ with tempfile.TemporaryDirectory() as tmp:
    assert 'Cylinder retracts' in page.locator('#feedback').inner_text()
    page.locator('[data-tab="learn"]').click()
    assert page.locator('#notes').input_value()=='Samsung test notes'
+   assert page.locator('#advancedNotes').input_value()=='Capstone design notes'
+   assert page.evaluate('project.advancedCompleted.includes("hyd-power")')
+   assert page.evaluate('project.advancedAnswers["hyd-power"]')=='Fluid power = 5 kW; shaft input = 5.88 kW'
+   assert page.evaluate('labProgram[1].preset')==200
    assert page.locator('#lessons input').first.is_checked()
    page.locator('[data-tab="calculators"]').click()
    assert page.locator('#bore').input_value()=='40'
@@ -54,10 +87,10 @@ with tempfile.TemporaryDirectory() as tmp:
    page.screenshot(path=str(ROOT/'docs/mobile-dashboard.png'),full_page=True)
    for width in [360,412,768,1280]:
     page.set_viewport_size({'width':width,'height':900})
-    for tab in ['dashboard','learn','calculators','compare','projects','profile','studio']:
+    for tab in ['dashboard','learn','calculators','compare','projects','profile','studio','plc','symbols']:
      page.evaluate('(tab)=>navigate(tab)',tab)
      assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (width,tab,'overflow')
    assert not errors,errors
-   print('PASS: mobile dashboard/navigation, registration, save/reload, notes, lessons, calculator, coil, comparison, and responsive widths 360/412/768/1280; no JS errors')
+   print('PASS: mobile dashboard/navigation, registration, save/reload, notes, lessons, calculator, coil, comparison, advanced curriculum persistence, PLC timer/stop/compiler, symbols, hydraulic/electrical sizing, and responsive widths 360/412/768/1280; no JS errors')
    browser.close()
  finally:process.terminate();process.wait()

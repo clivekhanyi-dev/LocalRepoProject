@@ -14,3 +14,10 @@ Verified in this cloud workspace:
 A compiler note flags compatibility APIs deprecated on newer Android versions. The installed command-line SDK metadata is newer than the pinned Android Gradle Plugin's metadata parser; it prints an SDK XML version warning but the APK compiles successfully. These are distinct from application runtime failures.
 
 Not verified here: installation or execution on a physical Samsung, Android document picker behaviour on that device, native lifecycle/keyboard/insets on that device, USB forwarding from the user's Windows laptop, public HTTPS hosting, or Google Play release. Follow the phone checklist in ANDROID-WINDOWS.md. This is a network-dependent client; unsaved edits are not durable offline. The existing pilot backend still needs public-hosting hardening and operational configuration before broad deployment.
+
+
+## Advanced automation update
+
+Five additional model tests verify boolean precedence and rejection, unknown tags, seal-in/dropout, TON timing/reset, sequential scan behaviour, SET/RESET ordering and hydraulic/electrical units. The expanded mobile end-to-end test verifies advanced module answers/progress/notebook, uploaded text evidence and old notes across project save/load, editable PLC presets, timer completion, stop dropout, compiler diagnostics, symbols and the new calculators. Responsive views include the PLC lab and symbols at 360/412/768/1280 pixels. Python account/project integration remains passing. The title expectation changed to Automation Engineering Academy.
+
+CODESYS compilation, full ST execution, general hydraulic/electrical circuit simulation and certification of the authored symbols have not been performed or claimed. Existing Android native packaging is unchanged by this web update.

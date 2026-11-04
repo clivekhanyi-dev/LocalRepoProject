@@ -28,5 +28,5 @@ class Integration(unittest.TestCase):
   with self.assertRaises(urllib.error.HTTPError):request(a,'/api/projects')
   request(a,'/api/login',{'email':'a@example.com','password':'a-long-test-password'})
   self.assertEqual(len(request(a,'/api/projects')['projects']),1)
-  with a.open(self.url+'/') as r:self.assertIn(b'Pneumatic Automation Academy',r.read())
+  with a.open(self.url+'/') as r:self.assertIn(b'Automation Engineering Academy',r.read())
 if __name__=='__main__':unittest.main()
