@@ -47,3 +47,10 @@ The exact V3 bundle passes offline V2→V3 migration tests, actual pointer/numer
 Eight additional model cases cover all 48 catalogue entries and seven starter connections/routes, graph-based ideal-air behaviour, spring return and independent cylinders, reverse-check/exhaust faults, drawing-only domain gating, rotated ports and import schema, panel type/backfeed rejection and orthogonal routing. All 36 model tests pass, as does Python account/project integration.
 
 The exact offline V4 bundle passes actual V3 backup migration, toolbox and dot connections, independent valve controls, drawing-only gating, rotation/duplication, Undo/Redo, SVG downloads, panel functional links and type rejection, pointer movement, synchronization with the advanced V3 plan, persistence/restart, malformed import rejection and 360/412/768/1600 layouts without JavaScript errors or external assets. The server/mobile regression passes. File-URL policy, physical-device, manufacturer-pinout, hydraulic/electrical-simulation and conformity limits are recorded in VERSION-4.md.
+
+
+## Version 5 guided wiring and site worksheets
+
+Eight new model cases verify all three complete schedules, return-path behaviour, relay seal-in/dropout, four-stage PLC motion/rearm/Stop, missing-coil/air timeout, unknown-bore handling and force units, absolute-reference/group tube flow/loss and guarded imports. All 44 model cases and backend account/project integration pass.
+
+The exact V5 bundle passes offline V4→V5 migration, actual terminal-dot/dropdown connections, trace/Undo/Redo/removal, direct/relay/PLC simulation and fault timeout, measurement unknowns and worked example, tubing screens, voltage mismatch, enquiry/report downloads, all seven added Circuit Builder parts and hydraulic panel bank, save/restart/backup recovery/rejection, duplicate-ID absence and 360/412/768/1600 layouts. Existing mobile/server regression passes. The distribution ZIP contains only V5 HTML; earlier HTMLs remain unchanged. File-URL/physical-device, named-model scope, product-data and actual construction limits are documented in VERSION-5.md.

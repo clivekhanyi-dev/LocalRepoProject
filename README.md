@@ -1,6 +1,6 @@
 # Automation Engineering Academy
 
-**Version 4: open `Automation-Academy-V4.html` directly in Chrome or Edge.** This is the single-file offline desktop edition; no Python or VS Code is needed. See [Version 4 instructions](docs/VERSION-4.md) for saving, backups and transferring existing projects. Server/Android instructions below still apply to the original hosted edition.
+**Version 5: open `Automation-Academy-V5.html` directly in Chrome or Edge.** This is the single-file offline desktop edition; no Python or VS Code is needed. See [Version 5 instructions](docs/VERSION-5.md) for saving, backups and transferring existing projects. Server/Android instructions below still apply to the original hosted edition.
 
 
 An automation learning workspace spanning pneumatics, hydraulics, electrical engineering and CODESYS / IEC 61131-3 programming. Existing accounts, projects, product comparisons and notes remain compatible. Independent of manufacturers.
@@ -75,7 +75,7 @@ For existing Windows ZIP installations: download the updated `android-mobile-app
 
 V2 extends the single-file V1 app with cylinder/load/bore/stroke and air-flow worksheets, tube-ID screening, a DC panel/thermal budget and uniform-module layout tool, 36 symbols, four worked functional circuits, five runnable PLC examples, additional simulated inputs and two full CODESYS ST references. See [Version 2 guide](docs/VERSION-2.md) for assumptions and limitations. V1 HTML is preserved unchanged; export a V1 backup and import it into V2.
 
-`python3 tools/build_standalone.py` builds the current V4 HTML. The historical V1 generator/source is retained by the standalone-v1.0.0 tag. Run `node tests/design.test.cjs` for the ten new model/example tests and `python3 tests/version2_smoke.py` for the offline migration/workbench regression.
+`python3 tools/build_standalone.py` builds the current V5 HTML. The historical V1 generator/source is retained by the standalone-v1.0.0 tag. Run `node tests/design.test.cjs` for the ten new model/example tests and `python3 tests/version2_smoke.py` for the offline migration/workbench regression.
 
 
 ## Version 3 integrated panel / engineering pathway
@@ -92,3 +92,12 @@ Additional checks: `node tests/panel.test.cjs` and `python3 tests/version3_smoke
 Home opens **Build circuit** and **Build panel**. The searchable studio offers 48 component kinds across pneumatics, hydraulics, electrical and PLC/sensing, seven starter circuits, orthogonal connection routing, rotation, duplication, Undo/Redo and SVG export. Four starters support ideal pneumatic animation; three are explicitly drawing-only. The illustrated panel builder offers 14 generic device types, row snapping, functional connection dots/buttons, zoom, templates and project saving. Detailed V3 settings and SANS/IEC review remain available under More options.
 
 See [V4 opening, backup and build instructions](docs/VERSION-4.md). V1/V2/V3 HTML files remain unchanged; their tagged sources retain their respective builders. Run `node --test tests/*.test.cjs` and `python3 tests/version4_smoke.py` for model and offline UI checks.
+
+
+## Version 5 guided wiring and practical simulations
+
+V5 adds three completely wired 24 V DC training panels (hold-to-run solenoid, relay seal-in and a PLC two-station valve-terminal sequence). Practise from unwired, add guided connections, trace wires, inspect component explanations and run the actual contact/coil connectivity model. Missing returns, fuse/coil faults and air loss affect behaviour; the PLC uses virtual end feedback and a deterministic timeout. Hydraulic terminal additions are drawing-only. The general Circuit Builder now offers 55 part kinds, including seven new practical components and ten additional original symbol/reference drawings.
+
+Site worksheets capture measured stroke/rod and confirmed bore separately, produce a customer enquiry, and screen tubing ID/velocity/approximate pressure loss, reference airflow and solenoid current/flow assumptions. No barrel-OD-to-bore inference, verified product selection, real pinout or safety certification is generated. Existing lessons, calculations, comparisons and projects remain.
+
+See [the V5 guide](docs/VERSION-5.md). The `standalone-v5.0.0` distribution tag deliberately contains only `Automation-Academy-V5.html`, so its downloadable ZIP excludes previous versions and source files. Full source is retained on `android-mobile-app` and `source-v5.0.0`. Build with `python3 tools/build_standalone.py`; optionally run `python3 tools/package_standalone.py` for a local single-HTML ZIP. Earlier release bundles are unchanged.
