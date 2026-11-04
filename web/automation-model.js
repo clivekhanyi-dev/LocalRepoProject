@@ -9,9 +9,10 @@ function parse(expression){
  const ast=or();if(i!==tokens.length)throw Error('Use AND, OR, NOT and parentheses only');return ast;
 }
 function evaluate(ast,tags){if(ast.op==='tag'){if(ast.name==='TRUE')return true;if(ast.name==='FALSE')return false;if(!Object.hasOwn(tags,ast.name))throw Error('Unknown tag: '+ast.name);return !!tags[ast.name];}if(ast.op==='not')return !evaluate(ast.a,tags);const a=evaluate(ast.a,tags),b=evaluate(ast.b,tags);return ast.op==='and'?a&&b:a||b;}
+const inputDefaults={Start:false,StopHealthy:true,OverloadHealthy:true,Reset:false,Extended:false,Retracted:true,PressureOK:true,PartPresent:false,Reverse:false};
 function compile(program){
  if(!Array.isArray(program)||program.length<1||program.length>16)throw Error('Use 1–16 rungs');
- const inputs=['Start','StopHealthy','OverloadHealthy'],seen=new Set(),timers=new Set();
+ const inputs=Object.keys(inputDefaults),seen=new Set(),timers=new Set();
  const parsed=program.map((r,i)=>{
   if(!r||typeof r.tag!=='string'||! /^[A-Za-z_][A-Za-z0-9_]{0,31}$/.test(r.tag)||inputs.includes(r.tag)||['TRUE','FALSE','AND','OR','NOT','__proto__','constructor','prototype'].includes(r.tag))throw Error('Rung '+(i+1)+': invalid output tag');
   if(!['COIL','SET','RESET','TON'].includes(r.action))throw Error('Invalid rung action');
@@ -20,13 +21,13 @@ function compile(program){
   seen.add(r.tag);return {...r,ast:parse(r.expression)};
  });
  for(const r of parsed){if(timers.has(r.tag)&&r.action!=='TON')throw Error('A timer instance cannot also be a coil');}
- const tags={Start:false,StopHealthy:true,OverloadHealthy:true};for(const r of parsed)tags[r.action==='TON'?r.tag+'.Q':r.tag]=false;
+ const tags={...inputDefaults};for(const r of parsed)tags[r.action==='TON'?r.tag+'.Q':r.tag]=false;
  for(const r of parsed)evaluate(r.ast,tags);
  return parsed;
 }
 function scan(program,state,inputs,dt){
  if(!Number.isFinite(dt)||dt<=0||dt>1000)throw Error('Scan interval must be 1–1000 ms');
- const parsed=compile(program),tags={Start:false,StopHealthy:true,OverloadHealthy:true,...state.tags,...inputs},timers={};
+ const parsed=compile(program),tags={...inputDefaults,...state.tags,...inputs},timers={};
  for(const r of parsed)if(r.action==='TON')tags[r.tag+'.Q']??=false;else tags[r.tag]??=false;
  const trace=[];
  for(const r of parsed){const before={...tags},powered=evaluate(r.ast,tags);
@@ -37,7 +38,7 @@ function scan(program,state,inputs,dt){
  }
  return {tags,timers,trace,elapsed:(state.elapsed||0)+dt};
 }
-function hydraulic(p,q,bore,rod,efficiency){if(![p,q,bore,rod,efficiency].every(Number.isFinite)||p<0||q<=0||bore<=0||rod<0||rod>=bore||efficiency<=0||efficiency>1)return null;const a=Math.PI*bore*bore/4,ar=Math.PI*(bore*bore-rod*rod)/4;return {force:p*.1*a,retractForce:p*.1*ar,extendSpeed:q*1e6/60/a,retractSpeed:q*1e6/60/ar,fluidPower:p*q/600,inputPower:p*q/600/efficiency};}
+function hydraulic(p,q,bore,rod,efficiency){if(![p,q,bore,rod,efficiency].every(Number.isFinite)||p<0||q<=0||bore<=0||rod<0||rod>=bore||efficiency<=0||efficiency>1)return null;const a=Math.PI*bore*bore/4,ar=Math.PI*(bore*bore-rod*rod)/4;return {force:p*.1*a,retractForce:p*.1*ar,extendSpeed:q*1e6/60/a,retractSpeed:q*1e6/60/ar,fluidPower:p*q/600,inputPower:p*q/600/efficiency,returnOnRetract:q*a/ar,returnOnExtend:q*ar/a};}
 function motor(voltage,power,pf,efficiency){if(![voltage,power,pf,efficiency].every(Number.isFinite)||voltage<=0||power<=0||pf<=0||pf>1||efficiency<=0||efficiency>1)return null;return {current:power*1000/(Math.sqrt(3)*voltage*pf*efficiency),inputPower:power/efficiency};}
-const api={parse,evaluate,compile,scan,hydraulic,motor};if(typeof module!=='undefined')module.exports=api;else root.Automation=api;
+const api={parse,evaluate,compile,scan,hydraulic,motor,inputDefaults};if(typeof module!=='undefined')module.exports=api;else root.Automation=api;
 })(globalThis);

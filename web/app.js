@@ -38,7 +38,7 @@ $('example').onclick=example;$('clear').onclick=()=>{running=false;project.nodes
 function step(){if(Model.validate(project).length){running=false;toast('Resolve the circuit connections before running.');render();return}position=Model.advance(position,coil);render()}
 $('play').onclick=()=>{running=!running;if(running&&Model.validate(project).length){running=false;toast('Resolve the circuit connections before running.')}render()};$('step').onclick=step;$('reset').onclick=()=>{running=false;position=0;coil=false;$('coil').checked=false;render()};$('coil').onchange=e=>{coil=e.target.checked;render()};setInterval(()=>{if(running)step()},120);
 function force(){const b=+$('bore').value,p=+$('pressure').value,r=+$('rod').value,f=Model.forces(p,b,r);$('force').textContent=f?`Extend ${f.extend.toFixed(1)} N · Retract ${f.retract.toFixed(1)} N`:'Enter valid dimensions (rod < bore).';$('force').title='F = p × A; 1 bar = 0.1 N/mm². Extend A = πD²/4; retract A = π(D²−d²)/4. Usable force is lower due to friction and back pressure.'}for(const id of ['pressure','bore','rod'])$(id).oninput=force;
-const tabNames={dashboard:'Dashboard',studio:'Circuit studio',learn:'Lessons',calculators:'Calculators',compare:'Product comparisons',projects:'Projects',profile:'Profile',plc:'PLC / CODESYS lab',symbols:'Engineering symbols'};
+const tabNames={dashboard:'Dashboard',studio:'Circuit studio',learn:'Lessons',calculators:'Calculators',compare:'Product comparisons',projects:'Projects',profile:'Profile',plc:'PLC / CODESYS lab',symbols:'Engineering symbols',sizing:'Cylinder sizing & airflow',circuits:'Complete circuits',panels:'Panel workshop'};
 function navigate(tab){if(tab!=='plc'&&window.pausePLCLab)pausePLCLab();
  if(!tabNames[tab])tab='dashboard';
  document.querySelectorAll('.tab').forEach(s=>s.hidden=s.id!==tab);
@@ -57,8 +57,8 @@ window.addEventListener('popstate',()=>navigate(location.hash.slice(1)));
 $('projectSave').onclick=()=>$('save').click();$('projectOpen').onclick=()=>$('load').click();
 $('mobileProjectName').oninput=()=>{$('projectName').value=$('mobileProjectName').value};
 $('profileLogin').onclick=()=>$('auth').showModal();
-function profileState(email){if(window.StandaloneStore){$('account').textContent='Local profile · V1';$('profileEmail').textContent=StandaloneStore.profile();$('profileLogin').hidden=true;$('logout').hidden=true;return}$('account').textContent=email||'Sign in / Register';$('profileEmail').textContent=email||'Exploring as a guest';$('profileLogin').hidden=!!email;$('logout').hidden=!email}
-async function refreshProfile(){if(window.StandaloneStore){profileState();$('serverAddress').textContent='Version 1.0 · standalone HTML · no server';$('connectionStatus').textContent=StandaloneStore.status();return}
+function profileState(email){if(window.StandaloneStore){$('account').textContent='Local profile · V'+(window.AppEdition?.major||1)+'';$('profileEmail').textContent=StandaloneStore.profile();$('profileLogin').hidden=true;$('logout').hidden=true;return}$('account').textContent=email||'Sign in / Register';$('profileEmail').textContent=email||'Exploring as a guest';$('profileLogin').hidden=!!email;$('logout').hidden=!email}
+async function refreshProfile(){if(window.StandaloneStore){profileState();$('serverAddress').textContent='Version '+(window.AppEdition?.version||'1.0')+' · standalone HTML · no server';$('connectionStatus').textContent=StandaloneStore.status();return}
  $('serverAddress').textContent='Backend: '+location.origin;
  $('connectionStatus').textContent=navigator.onLine?'Checking server…':'Device is offline. Saving and loading need a connection.';
  try{const r=await api('me');profileState(r.email);$('connectionStatus').textContent='Connected · signed in';}

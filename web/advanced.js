@@ -1,3 +1,4 @@
+const plcExtraIds={Reset:'plcReset',Extended:'plcExtended',Retracted:'plcRetracted',PressureOK:'plcPressure',PartPresent:'plcPart',Reverse:'plcReverse'};
 const defaultProgram=()=>[
  {tag:'Run',action:'COIL',expression:'StopHealthy AND OverloadHealthy AND (Start OR Run)',preset:0},
  {tag:'T1',action:'TON',expression:'Run',preset:1500},
@@ -29,7 +30,7 @@ function renderSymbols(){
 $('symbolSearch').oninput=renderSymbols;
 function advancedCalculations(){
  const values=inputIds.map(id=>$(id).value.trim()===''?NaN:Number($(id).value));
- const h=Automation.hydraulic(...values.slice(0,5));$('hydResult').textContent=h?`Ideal extension: ${h.force.toFixed(1)} N\nIdeal retraction: ${h.retractForce.toFixed(1)} N\nExtension speed: ${h.extendSpeed.toFixed(1)} mm/s\nRetraction speed: ${h.retractSpeed.toFixed(1)} mm/s\nFluid power: ${h.fluidPower.toFixed(2)} kW\nEstimated shaft input: ${h.inputPower.toFixed(2)} kW`:'Enter valid positive flow and dimensions, pressure ≥ 0, rod < bore, and efficiency in (0, 1].';
+ const h=Automation.hydraulic(...values.slice(0,5));$('hydResult').textContent=h?`Ideal extension: ${h.force.toFixed(1)} N\nIdeal retraction: ${h.retractForce.toFixed(1)} N\nExtension speed: ${h.extendSpeed.toFixed(1)} mm/s\nRetraction speed: ${h.retractSpeed.toFixed(1)} mm/s\nFluid power: ${h.fluidPower.toFixed(2)} kW\nEstimated shaft input: ${h.inputPower.toFixed(2)} kW\nCap return during retraction: ${h.returnOnRetract.toFixed(2)} L/min\nRod return during extension: ${h.returnOnExtend.toFixed(2)} L/min`:'Enter valid positive flow and dimensions, pressure ≥ 0, rod < bore, and efficiency in (0, 1].';
  const m=Automation.motor(...values.slice(5));$('motorResult').textContent=m?`Estimated line current: ${m.current.toFixed(2)} A\nElectrical input: ${m.inputPower.toFixed(2)} kW`:'Enter positive voltage/power, and power factor and efficiency in (0, 1].';
 }
 inputIds.forEach(id=>$(id).oninput=advancedCalculations);
@@ -43,7 +44,7 @@ function renderEditor(){
  });
 }
 function readProgram(){return [...document.querySelectorAll('.rung-row')].map(r=>({tag:r.querySelector('.rung-tag').value.trim(),action:r.querySelector('.rung-action').value,expression:r.querySelector('.rung-expression').value.trim(),preset:Number(r.querySelector('.rung-preset').value)}))}
-function plcInputs(){return {Start:$('plcStart').checked,StopHealthy:$('plcStop').checked,OverloadHealthy:$('plcOverload').checked};}
+function plcInputs(){return {Start:$('plcStart').checked,StopHealthy:$('plcStop').checked,OverloadHealthy:$('plcOverload').checked,...Object.fromEntries(Object.entries(plcExtraIds).map(([name,id])=>[name,$(id).checked]))};}
 function compileLab(){
  pausePLCLab();try{const p=readProgram();Automation.compile(p);labProgram=p;labState={tags:{},timers:{},elapsed:0};labDirty=false;$('plcError').style.color='#447a23';$('plcError').textContent='Compiled. Runtime reset; press Single scan or Run scans.';renderLab();return true}catch(e){$('plcError').style.color='#a63f28';labDirty=true;labState={tags:{},timers:{},elapsed:0};$('plcError').textContent=e.message;$('ladder').replaceChildren();$('plcTrace').replaceChildren();$('stCode').textContent='Fix the program and compile before generating Structured Text.';return false}
 }
@@ -53,9 +54,9 @@ window.pausePLCLab=pausePLCLab;
 $('compilePlc').onclick=compileLab;$('scanPlc').onclick=scanLab;$('runPlc').onclick=()=>{if(labDirty)return toast('Compile the edited program first.');labRunning=!labRunning;$('runPlc').textContent=labRunning?'Pause scans':'Run scans'};
 setInterval(()=>{if(labRunning)scanLab()},100);
 $('addRung').onclick=()=>{labProgram=readProgram();if(labProgram.length>=16)return toast('This lab supports up to 16 rungs.');labProgram.push({tag:'Output'+(labProgram.length+1),action:'COIL',expression:'FALSE',preset:0});markDirty();renderEditor()};
-$('resetPlc').onclick=()=>{labProgram=defaultProgram();$('plcStart').checked=false;$('plcStop').checked=true;$('plcOverload').checked=true;renderEditor();compileLab()};
+$('resetPlc').onclick=()=>{labProgram=defaultProgram();$('plcStart').checked=false;$('plcStop').checked=true;$('plcOverload').checked=true;for(const[name,id]of Object.entries(plcExtraIds))$(id).checked=Automation.inputDefaults[name];renderEditor();compileLab()};
 function stProgram(){
- const declarations=['    Start : BOOL;','    StopHealthy : BOOL := TRUE;','    OverloadHealthy : BOOL := TRUE;'],seen=new Set();
+ const declarations=Object.entries(Automation.inputDefaults).map(([name,value])=>'    '+name+' : BOOL'+(value?' := TRUE':'')+';'),seen=new Set();
  for(const r of labProgram)if(!seen.has(r.tag)){seen.add(r.tag);declarations.push('    '+r.tag+' : '+(r.action==='TON'?'TON':'BOOL')+';')}
  const lines=labProgram.map(r=>r.action==='TON'?`${r.tag}(IN := ${r.expression}, PT := T#${r.preset}ms);`:r.action==='COIL'?`${r.tag} := ${r.expression};`:`IF ${r.expression} THEN ${r.tag} := ${r.action==='SET'?'TRUE':'FALSE'}; END_IF;`);
  return 'PROGRAM PLC_PRG\nVAR\n'+declarations.join('\n')+'\nEND_VAR\n\n(* Implementation; standard TON library and task configuration required. *)\n'+lines.join('\n');
@@ -83,12 +84,12 @@ function drawLadder(){
  host.setAttribute('viewBox',`0 0 ${maxWidth} ${Math.max(y,250)}`);host.style.width=maxWidth+'px';host.style.height=Math.max(y,250)+'px';
 }
 function renderLab(){drawLadder();$('stCode').textContent=stProgram();const trace=$('plcTrace');trace.replaceChildren();el('h3',`Runtime · ${labState.elapsed||0} ms simulated · fixed ${$('scanMs').value} ms per scan`,trace);const table=el('table',undefined,trace);const head=el('tr',undefined,table);['Rung','Tag','Rung result','Output','Timer ET / PT'].forEach(t=>el('th',t,head));labProgram.forEach((r,i)=>{const row=el('tr',undefined,table),t=labState.trace?.[i],timer=labState.timers?.[r.tag];[i+1,r.tag,t?String(t.powered):'Not scanned',t?String(t.value):'Not scanned',timer?`${timer.elapsed} / ${timer.preset} ms`:'—'].forEach(v=>el('td',String(v),row))})}
-for(const id of ['plcStart','plcStop','plcOverload'])$(id).onchange=drawLadder;
+for(const id of ['plcStart','plcStop','plcOverload',...Object.values(plcExtraIds)])$(id).onchange=drawLadder;
 window.saveAdvanced=function(){project.advancedNotes=$('advancedNotes').value;project.engineeringInputs=Object.fromEntries(inputIds.map(id=>[id,$(id).value]));project.plc={program:readProgram(),inputs:plcInputs(),scanMs:$('scanMs').value};};
 window.loadAdvanced=function(){
  pausePLCLab();project.advancedCompleted??=[];project.advancedAnswers??={};$('advancedNotes').value=project.advancedNotes||'';
  for(const id of inputIds)if(project.engineeringInputs?.[id]!==undefined)$(id).value=project.engineeringInputs[id];
  labProgram=project.plc?.program||defaultProgram();$('scanMs').value=project.plc?.scanMs||100;const inputs=project.plc?.inputs||{Start:false,StopHealthy:true,OverloadHealthy:true};$('plcStart').checked=inputs.Start;$('plcStop').checked=inputs.StopHealthy;$('plcOverload').checked=inputs.OverloadHealthy;
- renderEditor();compileLab();renderAdvancedLessons();advancedCalculations();
+ for(const[name,id]of Object.entries(plcExtraIds))$(id).checked=inputs[name]??Automation.inputDefaults[name];renderEditor();compileLab();renderAdvancedLessons();advancedCalculations();
 };
 loadAdvanced();renderSymbols();

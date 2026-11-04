@@ -1,6 +1,6 @@
 # Automation Engineering Academy
 
-**Version 1: open `Automation-Academy-V1.html` directly in Chrome or Edge.** This is the single-file offline desktop edition; no Python or VS Code is needed. See [Version 1 instructions](docs/VERSION-1.md) for saving, backups and transferring existing projects. Server/Android instructions below still apply to the original hosted edition.
+**Version 2: open `Automation-Academy-V2.html` directly in Chrome or Edge.** This is the single-file offline desktop edition; no Python or VS Code is needed. See [Version 2 instructions](docs/VERSION-2.md) for saving, backups and transferring existing projects. Server/Android instructions below still apply to the original hosted edition.
 
 
 An automation learning workspace spanning pneumatics, hydraulics, electrical engineering and CODESYS / IEC 61131-3 programming. Existing accounts, projects, product comparisons and notes remain compatible. Independent of manufacturers.
@@ -56,7 +56,7 @@ Optional mobile end-to-end test: install Playwright in your test environment and
 
 ## Advanced automation workspace
 
-Home opens the **CODESYS / PLC lab**, **Engineering symbols**, and **Advanced learning tracks**. Lessons can be filtered by Pneumatics, Hydraulics, Electrical, PLC / CODESYS and Integration. Twelve advanced modules include worked engineering challenges, saved reasoning and a commissioning notebook. Five original refresher lessons remain available in the foundation section; existing numeric completion IDs are unchanged. New module progress uses stable string IDs.
+Home opens the **CODESYS / PLC lab**, **Engineering symbols**, and **Advanced learning tracks**. Lessons can be filtered by Pneumatics, Hydraulics, Electrical, PLC / CODESYS and Integration. Twenty-one advanced modules include worked engineering challenges, saved reasoning and a commissioning notebook. Five original refresher lessons remain available in the foundation section; existing numeric completion IDs are unchanged. New module progress uses stable string IDs.
 
 The editable ladder lab supports AND/OR/NOT, ordinary coils, SET/RESET and TON with a scan trace. Edit rungs and compile before scanning. Tags are validated; no user code is executed through JavaScript eval. Input sampling and sequential assignments are modelled explicitly. A TON begins at ET=0 on its first TRUE call, resets when false, and finishes at the first simulated scan at/after PT. The lab advances deterministic virtual time, not real hardware timing. The three inputs are Start, StopHealthy and OverloadHealthy; other tags are internal outputs or TON instance `.Q` fields. SET/RESET multiple writers demonstrate scan order; ordinary duplicate coil writers are rejected.
 
@@ -69,3 +69,10 @@ Advanced lesson answers, notes, calculator inputs, PLC program, input selections
 Run additional model tests with `node tests/automation.test.cjs`. The mobile smoke test also exercises PLC timer/stop/compiler behaviour, technical symbols, new calculators and advanced project persistence.
 
 For existing Windows ZIP installations: download the updated `android-mobile-app` branch and copy its `web` folder into the project that actually contains `server.py`. Preserve your `academy.sqlite3` and existing project files. Refresh the browser with Ctrl+F5; no database migration or pip installation is required. The Android WebView receives these frontend updates from whichever backend it is configured to use; no native wrapper update is needed for these features.
+
+
+## Version 2 engineering workbenches
+
+V2 extends the single-file V1 app with cylinder/load/bore/stroke and air-flow worksheets, tube-ID screening, a DC panel/thermal budget and uniform-module layout tool, 36 symbols, four worked functional circuits, five runnable PLC examples, additional simulated inputs and two full CODESYS ST references. See [Version 2 guide](docs/VERSION-2.md) for assumptions and limitations. V1 HTML is preserved unchanged; export a V1 backup and import it into V2.
+
+`python3 tools/build_standalone.py` now builds the current V2 HTML. The historical V1 generator/source is retained by the standalone-v1.0.0 tag. Run `node tests/design.test.cjs` for the ten new model/example tests and `python3 tests/version2_smoke.py` for the offline migration/workbench regression.

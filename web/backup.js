@@ -25,7 +25,7 @@ $('exportBackup').onclick=async()=>{
  try{let saved=[];let warning='';try{saved=(await api('projects')).projects}catch(e){warning=' Only the current workspace was included.';}
  const name=$('projectName').value.trim()||'My workspace',current=JSON.parse(JSON.stringify(collect()));
  const projects=saved.filter(p=>p.name!==name);projects.push({name,project:current});
- const backup={format:'automation-academy-backup',version:1,exportedAt:new Date().toISOString(),profile:window.StandaloneStore?StandaloneStore.profile():undefined,projects,current:name};
+ const backup={format:'automation-academy-backup',version:1,appVersion:window.AppEdition?.version||'server',exportedAt:new Date().toISOString(),profile:window.StandaloneStore?StandaloneStore.profile():undefined,projects,current:name};
  downloadData('automation-academy-backup.json',JSON.stringify(backup,null,2),'application/json');toast('Backup downloaded.'+warning);
  }catch(e){toast('Export failed: '+e.message)}
 };

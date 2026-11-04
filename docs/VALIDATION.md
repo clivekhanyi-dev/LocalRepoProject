@@ -26,3 +26,10 @@ CODESYS compilation, full ST execution, general hydraulic/electrical circuit sim
 ## Version 1 standalone HTML
 
 The existing frontend is bundled with inline styles/scripts and the ST example as a data URL. Only this generated edition injects a browser-local store; the original backend authentication is retained for server clients. The exact HTML passes offline Chromium tests for local profile/project persistence, autosave, browser restart, JSON backup recovery/rejection, unfinished PLC drafts and export when browser storage is blocked. The managed browser blocks file:// navigation; these tests use a loopback URL fulfilled with the bundled bytes from memory and do not establish a real Windows double-click test. See VERSION-1.md for that limitation and browser-storage behaviour. The server-app regression also passes after adding shared backup support.
+
+
+## Version 2
+
+Ten additional model tests cover directional bore sizing with pressure/efficiency/margin, absolute-pressure/temperature air conversion, travel-time consistency, tube-ID units, DC/thermal budgeting, uniform-module layout, all five supplied PLC examples, a complete two-sensor sequence, timeout and edge-reset recovery, reversing neutral time and load/gravity/return-flow calculations. Together with the existing ten tests, 20 model tests pass.
+
+The exact V2 HTML passes offline browser tests for actual V1 backup migration, sizing/air/panel inputs and notes, 36 symbols, four functional diagrams, the 15-rung cylinder example, text/ST downloads, process restart, backup recovery and 360/412/768/1280 layouts. Existing server/mobile regression remains passing. The V1 HTML is unchanged. File URL policy, CODESYS execution, physical equipment, catalogue selection and symbol-certification limitations remain as documented in VERSION-2.md.

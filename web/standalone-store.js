@@ -1,6 +1,6 @@
 /* File-based edition: local data, not server authentication. Never stores passwords. */
 (function(){
- const key='automation-academy-v1';let available=true,data={version:1,profile:'Local learner',projects:[],draft:null};
+ const key='automation-academy-v'+(window.AppEdition?.major||1);let available=true,data={version:1,profile:'Local learner',projects:[],draft:null};
  try{const test=key+'-check';localStorage.setItem(test,'1');localStorage.removeItem(test);const raw=localStorage.getItem(key);if(raw){const saved=JSON.parse(raw);if(saved.version!==1||!Array.isArray(saved.projects))throw Error('Invalid local data');data=saved;}}
  catch(e){available=false;}
  function persist(next){if(!available)throw Error('Browser storage is unavailable. Use Export backup to keep your work as a file.');try{localStorage.setItem(key,JSON.stringify(next));data=next;}catch(e){throw Error('Browser storage is full or blocked. Export a backup now; this change was not saved.')}}
