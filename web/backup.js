@@ -11,12 +11,14 @@ function validateBackup(value){
  for(const p of value.projects){
   if(!p||typeof p.name!=='string'||!p.name.trim()||p.name.length>100||names.has(p.name))throw Error('Backup contains invalid or duplicate project names.');names.add(p.name);
   const d=p.project;if(!d||!Array.isArray(d.nodes)||!Array.isArray(d.wires)||d.nodes.length>100||d.wires.length>200)throw Error('Invalid circuit in backup.');
+  if(window.CircuitBuilder)CircuitBuilder.validateDrawing(d);
   const nodes=new Map();for(const n of d.nodes){if(!n||typeof n.id!=='string'||!n.id||n.id.includes(':')||nodes.has(n.id)||!Object.hasOwn(ports,n.kind)||!Number.isFinite(n.x)||!Number.isFinite(n.y))throw Error('Invalid circuit component.');nodes.set(n.id,n);}
   for(const w of d.wires){if(!Array.isArray(w)||w.length!==2)throw Error('Invalid hose.');for(const end of w){if(typeof end!=='string')throw Error('Invalid port.');const[id,port]=end.split(':');if(!nodes.has(id)||!Object.hasOwn(ports[nodes.get(id).kind],port))throw Error('Unknown circuit port.');}}
   if(d.completed!==undefined&&(!Array.isArray(d.completed)||!d.completed.every(i=>Number.isInteger(i)&&i>=0&&i<5)))throw Error('Invalid foundation progress.');
   if(d.products!==undefined&&(!Array.isArray(d.products)||d.products.length>2))throw Error('Invalid product evidence.');
   if(d.advancedCompleted!==undefined&&(!Array.isArray(d.advancedCompleted)||!d.advancedCompleted.every(i=>typeof i==='string')))throw Error('Invalid advanced progress.');
   if(d.designV3&&window.PanelDesign)PanelDesign.validateDesign(d.designV3);
+  if(d.buildV4&&window.PanelAssembly){if(!d.designV3?.plan)throw Error('Missing panel plan for easy-builder data.');PanelAssembly.validate(d.designV3.plan,d.buildV4,PanelFunctionPorts);}
   if(d.plc){if(!Array.isArray(d.plc.program)||d.plc.program.length<1||d.plc.program.length>16)throw Error('Invalid PLC program.');for(const r of d.plc.program)if(!r||typeof r.tag!=='string'||typeof r.expression!=='string'||r.expression.length>1500||!['COIL','SET','RESET','TON'].includes(r.action)||!Number.isFinite(Number(r.preset)))throw Error('Invalid PLC rung.');}
  }
  return value.projects;

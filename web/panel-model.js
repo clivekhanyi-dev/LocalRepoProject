@@ -8,6 +8,7 @@ function validatePlan(plan){
  const ids=new Set();for(const d of plan.devices){
   if(!d||typeof d.id!=='string'||! /^[A-Za-z][A-Za-z0-9_.-]{0,39}$/.test(d.id)||ids.has(d.id)||typeof d.label!=='string'||d.label.length>120)throw Error('Device IDs must be unique with valid labels.');ids.add(d.id);
   for(const k of ['x','y','width','height','depth','clearance','dcWatts','heat'])if(!Number.isFinite(d[k])||d[k]<0||d[k]>10000)throw Error('Device dimensions, location and loads must be finite nonnegative values.');
+  if(d.rotation!==undefined&&![0,90,180,270].includes(d.rotation))throw Error('Invalid device orientation.');
   if(d.width<5||d.height<5||d.depth<1)throw Error('Enter positive physical dimensions for each device.');
  }
  return plan;

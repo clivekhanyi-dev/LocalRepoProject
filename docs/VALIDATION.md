@@ -40,3 +40,10 @@ The exact V2 HTML passes offline browser tests for actual V1 backup migration, s
 Eight new panel-model tests cover integrated template references/geometry, entered keep-outs, depth/source assumptions, revision-bound evidence and non-applicability inventory, standards-record completeness, learning prerequisites and malformed import rejection. Twenty earlier model tests remain passing.
 
 The exact V3 bundle passes offline V2→V3 migration tests, actual pointer/numeric panel manipulation, source/review/standards/learning persistence, stale-evidence behaviour, escaped script-free HTML report generation, browser restart, backup recovery, invalid panel rejection and 360/412/768/1500 layouts. Existing server/mobile regression passes. These tests do not verify standard editions/adoptions, actual equipment/PL/SIL, conformity or a Windows file double-click. See VERSION-3.md for those limits.
+
+
+## Version 4 broad studio and easy assembly
+
+Eight additional model cases cover all 48 catalogue entries and seven starter connections/routes, graph-based ideal-air behaviour, spring return and independent cylinders, reverse-check/exhaust faults, drawing-only domain gating, rotated ports and import schema, panel type/backfeed rejection and orthogonal routing. All 36 model tests pass, as does Python account/project integration.
+
+The exact offline V4 bundle passes actual V3 backup migration, toolbox and dot connections, independent valve controls, drawing-only gating, rotation/duplication, Undo/Redo, SVG downloads, panel functional links and type rejection, pointer movement, synchronization with the advanced V3 plan, persistence/restart, malformed import rejection and 360/412/768/1600 layouts without JavaScript errors or external assets. The server/mobile regression passes. File-URL policy, physical-device, manufacturer-pinout, hydraulic/electrical-simulation and conformity limits are recorded in VERSION-4.md.
